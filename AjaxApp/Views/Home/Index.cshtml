@@ -1,11 +1,11 @@
-﻿@{
+@{
     ViewBag.Title = "Home Page";
 }
 
 <div class="jumbotron">
     <h1>ASP.NET</h1>
     <p class="lead">ASP.NET is a free web framework for building great Web sites and Web applications using HTML, CSS and JavaScript.</p>
-    <p><a href="http://asp.net" class="btn btn-primary btn-lg">Learn more &raquo;</a></p>
+    <p><a href="http://asp.net" id="ajaxRenderValue" class="btn btn-primary btn-lg">Learn more &raquo;</a></p>
 </div>
 
 <div class="row">
@@ -33,20 +33,23 @@
 <script type="text/javascript">
     $(document).ready(function () {
         console.log('Start process');
+        $("#ajaxRenderValue").text('Starting ...');
         var elements = [];
         for (var x = 1; x <= 50000; x++)
         {
+            $("#ajaxRenderValue").text('Processing ...' + x);
             elements.push(x);
         }
         console.log('Req Count ' + elements.length);
+        $("#ajaxRenderValue").text('Server Call');
         $.ajax({
             contentType: "application/json; charset=utf-8",
             dataType: 'json',
             url: "/Home/Index",
             type: "POST",
             data: JSON.stringify(elements),
-            success: function (response) { debugger; console.log('Done !!'); },
-            failre: function (response) { debugger;console.log('Failed ...'); }
+            success: function (response) { debugger; console.log('Done !!'); $("#ajaxRenderValue").text('Done'); },
+            failre: function (response) { debugger; console.log('Failed ...'); $("#ajaxRenderValue").text('Fail'); }
         });
     });
 </script>
